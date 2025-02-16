@@ -86,7 +86,7 @@
     <?php $this->load->view('template/navbar') ?>
 
     <!-- Load Header -->
- 
+    <?php $this->load->view('template/header') ?>
 
     <!-- Main Content -->
     <div class="flex min-h-screen "> <!-- pt-16 accounts for fixed header height -->

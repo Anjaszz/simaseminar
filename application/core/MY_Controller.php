@@ -34,7 +34,6 @@ class MY_Controller extends CI_Controller
         // Set data untuk semua view
         $this->load->vars($data);
         
-        // Load header dengan data
-        $this->load->view('template/header', $data);
+      
     }
 }
