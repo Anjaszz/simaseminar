@@ -621,9 +621,9 @@
 </section>
 
 
-    <footer class="bg-white text-black py-8">
+<footer class="bg-white text-black py-8 ">
   <div class="container mx-auto">
-    <div class="flex flex-wrap -mx-4">
+    <div class="flex flex-wrap ">
       <div class="w-full lg:w-1/4 px-4 mb-8">
         <img src="<?php echo base_url('assets/backend/template/assets/images/SIMAS.png'); ?>" alt="Logo" class="mb-4 max-w-[150px]">
         <p class="text-gray-600">Sistem Manajemen Seminar</p>
