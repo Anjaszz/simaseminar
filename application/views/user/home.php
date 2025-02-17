@@ -1,4 +1,83 @@
 
+<style>
+    /* Chat animations */
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.slide-right {
+    animation: slideRight 0.3s ease-out;
+}
+
+.slide-left {
+    animation: slideLeft 0.3s ease-out;
+}
+
+/* Chatbot container styles */
+#chatbot-container {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+#chatbot-icon {
+    transition: transform 0.3s ease;
+}
+
+#chatbot-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Message styles */
+.bot-message, .user-message {
+    margin-bottom: 1rem;
+}
+
+/* Custom scrollbar for chat messages */
+#chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+#chat-messages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+#chat-messages::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+#chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #757575;
+}
+
+/* Suggestion buttons hover effect */
+.suggest-btn {
+    transition: all 0.2s ease;
+}
+
+.suggest-btn:hover {
+    transform: translateX(5px);
+}
+</style>
 <div class="bg-gray-50 mt-20">  
     <!-- Hero Section with Stats -->  
     <header class="relative bg-gradient-to-r from-blue-600 to-purple-600 animate-header-gradient py-20">  
@@ -727,6 +806,7 @@ function filterFree() {
     window.location.href = '<?php echo base_url('user/home/index'); ?>?price_range=free';
 }   
 
+// Chat functionality
 document.addEventListener('DOMContentLoaded', function() {
     const chatbotIcon = document.getElementById('chatbot-icon');
     const chatbotContainer = document.getElementById('chatbot-container');
@@ -735,76 +815,113 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatInput = document.getElementById('chat-input');
     const chatMessages = document.getElementById('chat-messages');
 
-    // Initial chat content with suggestions
-    const initialChatContent = `
-        <div class="bot-message mb-4">
-            <div class="flex items-start">
-                <div class="bg-blue-100 rounded-lg p-3 max-w-[80%]">
-                    <p class="text-gray-800">Halo! Ada yang bisa saya bantu?</p>
+    // Define suggested questions
+    const suggestedQuestions = [
+        'Bagaimana cara mendaftar seminar?',
+        'Apa saja jenis seminar yang tersedia?',
+        'Bagaimana cara mendapatkan sertifikat?',
+        'Berapa biaya untuk mengikuti seminar?'
+    ];
+
+    // Function to create initial chat content
+    function createInitialChatContent() {
+        return `
+            <div class="bot-message mb-4">
+                <div class="flex items-start">
+                    <div class="bg-blue-100 rounded-lg p-3 max-w-[80%]">
+                        <p class="text-gray-800">Halo! Saya asisten SIMAS. Ada yang bisa saya bantu tentang seminar?</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="suggested-questions mb-4">
-            <p class="text-sm text-gray-500 mb-2">Pertanyaan yang sering ditanyakan:</p>
-            <div class="flex flex-col gap-2">
-                <button class="suggest-btn text-left px-3 py-2 bg-white border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors text-sm">
-                    Bagaimana cara mendaftar seminar?
-                </button>
-                <button class="suggest-btn text-left px-3 py-2 bg-white border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors text-sm">
-                    Apa saja seminar gratis yang tersedia?
-                </button>
-                <button class="suggest-btn text-left px-3 py-2 bg-white border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors text-sm">
-                    Bagaimana cara mendapatkan sertifikat seminar?
-                </button>
+            
+            <div class="suggested-questions mb-4">
+                <p class="text-sm text-gray-500 mb-2">Pertanyaan yang sering ditanyakan:</p>
+                <div class="flex flex-col gap-2">
+                    ${suggestedQuestions.map(question => `
+                        <button class="suggest-btn text-left px-3 py-2 bg-white border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors text-sm">
+                            ${question}
+                        </button>
+                    `).join('')}
+                </div>
             </div>
-        </div>
-    `;
+        `;
+    }
 
     // Toggle chat interface
     chatbotIcon.addEventListener('click', () => {
         chatbotContainer.classList.toggle('hidden');
         if (!chatbotContainer.classList.contains('hidden')) {
             chatInput.focus();
-            // Reset chat to initial state with suggestions
-            chatMessages.innerHTML = initialChatContent;
-            // Add click events to new suggestion buttons
+            chatMessages.innerHTML = createInitialChatContent();
             addSuggestionListeners();
         }
     });
 
     closeChat.addEventListener('click', () => {
         chatbotContainer.classList.add('hidden');
-        // Reset chat to initial state
-        chatMessages.innerHTML = initialChatContent;
-        chatInput.value = '';
-        // Add click events to new suggestion buttons
-        addSuggestionListeners();
     });
 
-    // Function to add click events to suggestion buttons
+    // Function to add suggestion button listeners
     function addSuggestionListeners() {
         document.querySelectorAll('.suggest-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const question = this.textContent.trim();
-                // Remove suggestions after clicking
-                document.querySelector('.suggested-questions')?.remove();
-                // Send the suggested question
                 handleUserMessage(question);
+                
+                // Remove suggestions after clicking
+                const suggestedQuestions = document.querySelector('.suggested-questions');
+                if (suggestedQuestions) {
+                    suggestedQuestions.remove();
+                }
             });
         });
     }
 
-    // Initial setup of suggestion listeners
-    addSuggestionListeners();
+    // Function to add a message to the chat
+    function addMessage(message, type) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `${type}-message mb-4 ${type === 'user' ? 'text-right' : 'text-left'}`;
+        
+        // Add animation classes based on message type
+        const animationClass = type === 'user' ? 'slide-left' : 'slide-right';
+        
+        messageDiv.innerHTML = `
+            <div class="flex items-start ${type === 'user' ? 'justify-end' : 'justify-start'}">
+                <div class="${type === 'user' ? 'bg-blue-600 text-white' : 'bg-blue-100 text-gray-800'} 
+                            rounded-lg p-3 max-w-[80%] ${animationClass}">
+                    <p>${message}</p>
+                </div>
+            </div>
+        `;
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
 
-    // Handle user message
+    // Function to handle sending messages
     async function handleUserMessage(message) {
-        // Add user message to chat
+        // Show user message
         addMessage(message, 'user');
+        
+        // Clear input field
         chatInput.value = '';
 
+        // Show loading indicator
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'bot-message mb-4';
+        loadingDiv.innerHTML = `
+            <div class="flex items-start">
+                <div class="bg-blue-100 rounded-lg p-3">
+                    <p class="text-gray-800">
+                        <i class="fas fa-spinner fa-spin"></i> Mengetik...
+                    </p>
+                </div>
+            </div>
+        `;
+        chatMessages.appendChild(loadingDiv);
+
         try {
+            // Send message to backend
             const response = await fetch('<?php echo base_url("api/chat"); ?>', {
                 method: 'POST',
                 headers: {
@@ -814,45 +931,45 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error('Network response was not ok');
             }
 
             const data = await response.json();
+            
+            // Remove loading indicator
+            loadingDiv.remove();
+            
+            // Show bot response
             addMessage(data.response, 'bot');
+
         } catch (error) {
             console.error('Error:', error);
+            loadingDiv.remove();
             addMessage('Maaf, terjadi kesalahan. Silakan coba lagi.', 'bot');
         }
     }
 
-    // Handle chat form submission
+    // Handle form submission
     chatForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const message = chatInput.value.trim();
+        
         if (!message) return;
-
-        // Remove suggestions when user starts typing
-        document.querySelector('.suggested-questions')?.remove();
         
         handleUserMessage(message);
     });
 
-    function addMessage(message, type) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `${type}-message mb-4`;
-        
-        const messageContent = `
-            <div class="flex items-start ${type === 'user' ? 'justify-end' : ''}">
-                <div class="${type === 'user' ? 'bg-blue-600 text-white' : 'bg-blue-100 text-gray-800'} rounded-lg p-3 max-w-[80%]">
-                    <p>${message}</p>
-                </div>
-            </div>
-        `;
-        
-        messageDiv.innerHTML = messageContent;
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
+    // Add keypress event for better UX
+    chatInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            chatForm.dispatchEvent(new Event('submit'));
+        }
+    });
+
+    // Initialize chat
+    chatMessages.innerHTML = createInitialChatContent();
+    addSuggestionListeners();
 });
 
 // riview animasi
