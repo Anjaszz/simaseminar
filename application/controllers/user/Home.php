@@ -302,7 +302,7 @@ private function _processSeminarData(&$seminar) {
                     $data['jumlah_belum_bayar'] = $this->User_model->getJumlahBelumBayar($mahasiswa->id_mahasiswa);
                     $data['jumlah_history'] = $this->User_model->getJumlahHistory($mahasiswa->id_mahasiswa);
                     $data['jumlah_komunitas'] = $this->User_model->getJumlahKomunitas($mahasiswa->id_mahasiswa);
-                    $data['nama_mahasiswa'] = "Hi, " . $mahasiswa->nama_mhs;
+                    $data['nama_mahasiswa'] = $mahasiswa->nama_mhs;
                 } else {
                     $data['jumlah_seminar'] = 0;
                     $data['jumlah_belum_bayar'] = 0;
@@ -366,6 +366,15 @@ private function _processSeminarData(&$seminar) {
     
         if ($this->Pendaftaran_model->daftarkanSeminar($data)) {
             if ($id_stsbyr == 1) {
+                // Jika tiket gratis, tambahkan tiket terjual
+                $this->db->set('tiket_terjual', 'tiket_terjual + 1', FALSE);
+                $this->db->where('id_seminar', $id_seminar);
+                if ($this->db->update('tiket')) {
+                    log_message('debug', 'Tiket terjual berhasil ditambahkan untuk id_seminar: ' . $id_seminar);
+                } else {
+                    log_message('error', 'Gagal menambah tiket terjual untuk id_seminar: ' . $id_seminar);
+                }
+    
                 $this->session->set_flashdata('message_success', 'Pendaftaran seminar berhasil! Anda sudah terdaftar.');
             } else {
                 $this->session->set_flashdata('message_success', 'Pendaftaran seminar berhasil! Silahkan lanjutkan pembayaran.');
@@ -376,6 +385,7 @@ private function _processSeminarData(&$seminar) {
     
         redirect('user/home');
     }
+    
     
     
 

@@ -110,20 +110,19 @@ class User_model extends CI_Model {
         
         public function getDetailSeminarByID($id_seminar) {
             $this->db->select('s.id_seminar, s.nama_seminar, s.tgl_pelaksana, s.lampiran, 
-                               p.nama_pembicara, p.latar_belakang, 
+                               s.deskripsi, p.nama_pembicara, p.latar_belakang, 
                                t.slot_tiket, t.tiket_terjual, 
                                sp.nama_sponsor, 
-                               ls.nama_provinsi, s.lokasi'); // Menambahkan nama_provinsi dan lokasi dari tabel seminar
+                               ls.nama_provinsi, s.lokasi');
             $this->db->from('seminar s');
             $this->db->join('pembicara p', 'p.id_seminar = s.id_seminar', 'left');
             $this->db->join('tiket t', 't.id_seminar = s.id_seminar', 'left');
-            $this->db->join('sponsor sp', 'sp.id_seminar = s.id_seminar', 'left'); // Mengambil nama_sponsor berdasarkan id_seminar
-            $this->db->join('lokasi_seminar ls', 'ls.id_lokasi = s.id_lokasi', 'left'); // Join dengan tabel lokasi_seminar
+            $this->db->join('sponsor sp', 'sp.id_seminar = s.id_seminar', 'left');
+            $this->db->join('lokasi_seminar ls', 'ls.id_lokasi = s.id_lokasi', 'left');
             $this->db->where('s.id_seminar', $id_seminar);
             $query = $this->db->get();
             $seminar = $query->row();
         
-            // Hitung sisa tiket
             if ($seminar) {
                 $seminar->sisa_tiket = $seminar->slot_tiket - $seminar->tiket_terjual;
             }
@@ -138,17 +137,31 @@ class User_model extends CI_Model {
         }
 
         public function getJumlahSeminarDiikuti($id_mahasiswa) {
-            $this->db->where('id_mahasiswa', $id_mahasiswa);
-            $this->db->where('id_stsbyr', 1); // Mengambil berdasarkan id_stsbyr = 2
-            return $this->db->count_all_results('pendaftaran_seminar'); // Menggunakan tabel pendaftaran_seminar
-    }
+            $this->db->select('COUNT(*) as total');
+            $this->db->from('pendaftaran_seminar');
+            $this->db->join('seminar', 'seminar.id_seminar = pendaftaran_seminar.id_seminar'); // Join dengan tabel seminar
+            $this->db->where('pendaftaran_seminar.id_mahasiswa', $id_mahasiswa);
+            $this->db->where('pendaftaran_seminar.id_stsbyr', 1); // Mengambil berdasarkan id_stsbyr = 1
+            $this->db->where('seminar.tgl_pelaksana >=', date('Y-m-d')); // Filter seminar yang masih berjalan
+            $query = $this->db->get();
+            
+            return $query->row()->total; // Mengembalikan jumlah seminar yang diikuti
+        }
+        
 
     // Fungsi untuk mendapatkan jumlah belum bayar
     public function getJumlahBelumBayar($id_mahasiswa) {
-        $this->db->where('id_mahasiswa', $id_mahasiswa);
-        $this->db->where('id_stsbyr', 2); // Mengambil berdasarkan id_stsbyr = 2
-        return $this->db->count_all_results('pendaftaran_seminar'); // Menggunakan tabel pendaftaran_seminar
+        $this->db->select('COUNT(*) as total');
+        $this->db->from('pendaftaran_seminar');
+        $this->db->join('seminar', 'seminar.id_seminar = pendaftaran_seminar.id_seminar'); // Join dengan tabel seminar
+        $this->db->where('pendaftaran_seminar.id_mahasiswa', $id_mahasiswa);
+        $this->db->where('pendaftaran_seminar.id_stsbyr', 2); // Mengambil berdasarkan id_stsbyr = 2 (belum bayar)
+        $this->db->where('seminar.tgl_pelaksana >=', date('Y-m-d')); // Filter seminar yang masih berjalan
+        $query = $this->db->get();
+        
+        return $query->row()->total; // Mengembalikan jumlah seminar yang belum dibayar
     }
+    
 
     // Fungsi untuk mendapatkan jumlah history seminar
     public function getJumlahHistory($id_mahasiswa) {

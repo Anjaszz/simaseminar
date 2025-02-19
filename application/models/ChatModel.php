@@ -7,7 +7,11 @@ class ChatModel extends CI_Model {
         $this->db->join('mahasiswa', 'chat_komunitas.id_mahasiswa = mahasiswa.id_mahasiswa');
         $this->db->where('chat_komunitas.id_vendor', $id_vendor);
         $this->db->where('chat_komunitas.id_seminar', $id_seminar);
+        
+        // Urutkan berdasarkan tanggal dan waktu
+        $this->db->order_by('DATE(created_at)', 'ASC');
         $this->db->order_by('created_at', 'ASC');
+        
         return $this->db->get()->result_array();
     }
 
@@ -29,4 +33,28 @@ class ChatModel extends CI_Model {
     public function getChatById($id_chat) {
         return $this->db->get_where('chat_komunitas', ['id_chat' => $id_chat])->row_array();
     }
+
+    // Di ChatModel, tambahkan method:
+public function getFormattedDateTime($date) {
+    $today = date('Y-m-d');
+    $messageDate = date('Y-m-d', strtotime($date));
+    
+    if ($messageDate === $today) {
+        return 'Hari ini ' . date('H:i', strtotime($date));
+    } else {
+        // Format tanggal Indonesia
+        $months = [
+            '01' => 'Jan', '02' => 'Feb', '03' => 'Mar', '04' => 'Apr',
+            '05' => 'Mei', '06' => 'Jun', '07' => 'Jul', '08' => 'Ags',
+            '09' => 'Sep', '10' => 'Okt', '11' => 'Nov', '12' => 'Des'
+        ];
+        
+        $day = date('d', strtotime($date));
+        $month = $months[date('m', strtotime($date))];
+        $year = date('Y') === date('Y', strtotime($date)) ? '' : ' ' . date('Y', strtotime($date));
+        $time = date('H:i', strtotime($date));
+        
+        return "$day $month$year $time";
+    }
+}
 }

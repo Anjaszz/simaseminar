@@ -49,7 +49,7 @@ class Home_model extends CI_Model
         // Menghitung total jumlah dari transaksi_user berdasarkan id_vendor
         $this->db->select_sum('jumlah'); // Mengambil jumlah dari kolom jumlah
         $this->db->from('transaksi_user'); // Tabel transaksi_user
-        $this->db->where('id_admin', $id_vendor); // Filter berdasarkan id_vendor
+        $this->db->where('id_vendor', $id_vendor); // Filter berdasarkan id_vendor
         
         $query = $this->db->get(); // Eksekusi query
         return $query->row()->jumlah; // Mengembalikan total jumlah
@@ -60,7 +60,7 @@ class Home_model extends CI_Model
     {
         $this->db->select('MONTH(tgl_transaksi) as month, SUM(jumlah) as total');
         $this->db->from('transaksi_user');
-        $this->db->where('id_admin', $id_vendor);
+        $this->db->where('id_vendor', $id_vendor);
         $this->db->where('YEAR(tgl_transaksi)', date('Y'));
         $this->db->group_by('MONTH(tgl_transaksi)');
         $this->db->order_by('month', 'ASC');

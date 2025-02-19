@@ -13,6 +13,7 @@ class Pendaftaran_model extends CI_Model
         $this->db->join('metode_pembayaran', 'metode_pembayaran.id_metode = pendaftaran_seminar.id_metode', 'left');
         return $this->db->get('pendaftaran_seminar')->result();
     }
+    
 
  
     public function get_all_data()
