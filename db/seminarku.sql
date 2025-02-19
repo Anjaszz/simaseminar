@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 18, 2025 at 01:27 PM
+-- Generation Time: Feb 19, 2025 at 07:43 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -60,26 +60,6 @@ CREATE TABLE `chat_komunitas` (
   `tipe_file` enum('text','image','document') DEFAULT 'text',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `chat_komunitas`
---
-
-INSERT INTO `chat_komunitas` (`id_chat`, `id_vendor`, `id_seminar`, `id_mahasiswa`, `pesan`, `file_path`, `tipe_file`, `created_at`) VALUES
-(1, 1, 14, 42, 'hiii', NULL, 'text', '2025-01-12 20:34:39'),
-(2, 1, 14, 42, 'gimana kabar', NULL, 'text', '2025-01-12 20:36:55'),
-(3, 1, 14, 42, 'hj', NULL, 'text', '2025-01-13 07:07:43'),
-(4, 1, 14, 42, 'we', NULL, 'text', '2025-01-13 07:13:58'),
-(5, 1, 14, 42, 'sdss', NULL, 'text', '2025-01-13 07:16:36'),
-(6, 1, 14, 42, 'kau', NULL, 'text', '2025-01-14 22:34:12'),
-(7, 1, 14, 46, 'jkllkl', NULL, 'text', '2025-01-15 13:46:34'),
-(8, 1, 14, 42, 'Ffhy', NULL, 'text', '2025-01-15 13:48:18'),
-(9, 1, 14, 42, 'woy', NULL, 'text', '2025-01-15 16:35:57'),
-(10, 1, 14, 42, 'minta no hp nya dong\r\n', NULL, 'text', '2025-01-15 17:00:13'),
-(11, 1, 14, 42, 'kintil', NULL, 'text', '2025-01-15 17:04:26'),
-(12, 1, 14, 46, 'lagi apa bang\r\n', NULL, 'text', '2025-01-15 17:04:55'),
-(13, 1, 14, 42, 'iya', NULL, 'text', '2025-01-15 20:48:13'),
-(14, 1, 16, 42, 'hiiiuj', NULL, 'text', '2025-01-15 21:06:34');
 
 -- --------------------------------------------------------
 
@@ -139,13 +119,6 @@ CREATE TABLE `history_seminar` (
   `nama_mahasiswa` varchar(255) NOT NULL,
   `tanggal_pelaksanaan` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `history_seminar`
---
-
-INSERT INTO `history_seminar` (`id_history`, `id_admin`, `id_seminar`, `nama_seminar`, `id_mahasiswa`, `nama_mahasiswa`, `tanggal_pelaksanaan`) VALUES
-(44, 0, 17, 'seminar onlin', 46, 'kurni', '2025-01-18');
 
 -- --------------------------------------------------------
 
@@ -228,15 +201,6 @@ CREATE TABLE `komunitas` (
   `id_vendor` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `komunitas`
---
-
-INSERT INTO `komunitas` (`id`, `id_seminar`, `id_mahasiswa`, `id_vendor`) VALUES
-(3, 14, 42, 1),
-(4, 14, 46, 1),
-(6, 16, 42, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -249,20 +213,6 @@ CREATE TABLE `login_attempts` (
   `login` varchar(100) NOT NULL,
   `time` int(11) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `login_attempts`
---
-
-INSERT INTO `login_attempts` (`id`, `ip_address`, `login`, `time`) VALUES
-(17, '::1', 'ridwansaputra331@gmail.com', 1731790936),
-(18, '::1', 'ridwansaputra331@gmail.com', 1731791253),
-(19, '::1', 'ridwansaputra331@gmail.com', 1731792287),
-(20, '::1', 'ridwansaputra331@gmail.com', 1731792461),
-(21, '::1', 'ridwansaputra331@gmail.com', 1731792580),
-(22, '::1', 'ridwansaputra331@gmail.com', 1731793031),
-(23, '::1', 'ridwansaputra331@gmail.com', 1731793080),
-(24, '::1', 'ridwansaputra331@gmail.com', 1731793239);
 
 -- --------------------------------------------------------
 
@@ -338,29 +288,6 @@ CREATE TABLE `mahasiswa` (
   `tanggal_lahir` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `mahasiswa`
---
-
-INSERT INTO `mahasiswa` (`id_mahasiswa`, `id_admin`, `nim`, `foto`, `nama_mhs`, `id_fakultas`, `id_prodi`, `email`, `no_telp`, `tanggal_lahir`) VALUES
-(39, 0, 2412001, '', 'Ridwa', 3, 9, 'y@gmail.com', '081295101633', 2025),
-(40, 0, 2412002, '', 'Ridwan Saputra', 3, 8, 'testing@gmail.com', '0845457557576', 20),
-(41, 0, 2412003, '', 'Ridwan', 4, 19, 'testing1@gmail.com', '0845457557576', 30),
-(42, 0, 2412004, 'tes.png', 'user', 1, 2, 'user@gmail.com', '090099990099', 22),
-(43, 0, 2501001, '', 'opopo', 3, 11, 'opopo@gmail.com', '888888888888', 2025),
-(44, 0, 2501002, '', 'pukul', 4, 22, 'pukul@gmail.com', '777777777777', 2025),
-(45, 0, 2501003, '', 'hamid', 4, 19, 'hamid@gmail.com', '88888888888_', 2025),
-(46, 0, 2501004, '', 'kurni', 2, 5, 'kurni@gmail.com', '2122212121212', 21),
-(47, 0, 2501005, '', 'mansur', 2, 5, 'mansur@gmail.com', '081295101633', 22),
-(48, 0, 2501006, '', 'mansurs', 3, 5, 'mansur1@gmail.com', '081295101633', 22),
-(49, 0, 2501007, '', 'kurnie', 1, 2, 'kurnie@gmail.com', '2122212121212', 21),
-(50, 0, 2501008, '', 'maskur', 1, 2, 'maskur@gmail.com', '081388481245', 20),
-(51, 0, 2501009, '', 'maskur', 1, 2, 'maskur1@gmail.com', '081388481245', 20),
-(52, 0, 2501010, '', 'maskur', 1, 2, 'maskur2@gmail.com', '081388481245', 22),
-(53, 0, 2501011, '', 'maskur', 2, 3, 'masku6r2@gmail.com', '081388481245', 22),
-(54, 0, 2501012, '', 'maskur', 2, 3, 'masku6r62@gmail.com', '081388481245', 22),
-(55, 0, 2501013, '', 'maskur', 3, 7, 'mask1u6r62@gmail.com', '081388481245', 22);
-
 -- --------------------------------------------------------
 
 --
@@ -410,8 +337,8 @@ CREATE TABLE `metode_pembayaran` (
 
 INSERT INTO `metode_pembayaran` (`id_metode`, `nama_metode`) VALUES
 (1, 'Cash'),
-(2, 'Transfer'),
-(3, 'Belum Bayar');
+(2, 'Belum Bayar'),
+(3, 'Transfer');
 
 -- --------------------------------------------------------
 
@@ -427,16 +354,6 @@ CREATE TABLE `pembicara` (
   `id_seminar` tinyint(3) NOT NULL,
   `foto` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `pembicara`
---
-
-INSERT INTO `pembicara` (`id_pembicara`, `id_vendor`, `nama_pembicara`, `latar_belakang`, `id_seminar`, `foto`) VALUES
-(13, 1, 'khania Saputri S.T, M.T', 'Co founder', 3, '5b79623d771e51631a0baea7eba9178e.jpg'),
-(14, 0, 'Rayhan dava', 'founder', 4, '82e5c14b19f6d209be54848f44cc42fd.jpg'),
-(15, 1, 'jhhhhjjhjhjh', 'jkkkj', 14, '1df9dcfed2c8c662f402f6618b25959f.png'),
-(16, 0, 'kjkjkjkj', 'jkkkjkj', 14, 'dabcf774d9d26cdc369ba2873ddadded.png');
 
 -- --------------------------------------------------------
 
@@ -473,13 +390,6 @@ CREATE TABLE `presensi_seminar` (
   `jam_khd` time NOT NULL,
   `id_stskhd` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `presensi_seminar`
---
-
-INSERT INTO `presensi_seminar` (`id_presensi`, `id_mahasiswa`, `id_admin`, `nomor_induk`, `id_seminar`, `tgl_khd`, `jam_khd`, `id_stskhd`) VALUES
-(157, 46, 0, 2501004, 17, '2025-01-18', '04:02:26', 2);
 
 -- --------------------------------------------------------
 
@@ -565,25 +475,6 @@ CREATE TABLE `seminar` (
   `file` varchar(258) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `seminar`
---
-
-INSERT INTO `seminar` (`id_seminar`, `id_jenis`, `id_vendor`, `id_kategori`, `id_fakultas`, `id_scan`, `nama_seminar`, `deskripsi`, `id_lokasi`, `lokasi`, `tgl_pelaksana`, `lampiran`, `link_seminar`, `sertifikat`, `file`) VALUES
-(3, 0, 2, 3, 1, 0, 'How To Build Enterprise', 'dsfsfsdfs', 2, 'kjkjkkjjkkj', '2024-11-15 03:55:00', '35df26df19ce5a4a6911e1e2af4357af.jpg', '', 'sertifikat_1727833891.png', 'file_How_To_Build_Enterprise.sql'),
-(4, 0, 0, 0, 0, 0, 'Mastering the art of copywriting', '', 0, '', '2024-10-31 08:00:00', '5298c246a085775e215020733e1bd1c2.jpg', '', '', 'file_Mastering_the_art_of_copywriting.zip'),
-(8, 0, 0, 0, 0, 0, 'semianr bisnis digital', '', 0, '', '2025-02-25 08:00:00', 'a7fd84bf9361a0c2ede1824816d4e1c0.png', '', 'sertifikat_1729688502.jpg', 'file_semianr_bisnis_digital.zip'),
-(9, 0, 0, 2, 3, 0, 'sda', 'dadasdasd', 11, 'dasdsa', '2024-11-23 22:22:00', '/uploads/poster/5cec8f803549197062b6a5929ae0af5c.jpg', '', '', ''),
-(10, 0, 0, 3, 2, 0, 'dsds', 'sdada', 9, 'sasdsa', '2024-11-22 21:22:00', 'cbc73f295a7ba1478b5128a50be45ad4.jpg', '', '', ''),
-(11, 0, 1, 4, 2, 0, 'dfdggd', 'hkkkkh', 7, 'dfddfdfdffd', '2024-11-29 08:08:00', '64794a39a1c6f74cad59b2625e34cc0b.jpg', '', '', ''),
-(12, 0, 1, 3, 4, 0, 'khkjkj', 'hkhk', 12, 'hkhk', '2024-11-23 04:04:00', '48f27a01a8c46b497ef6fd2cfcf7698f.jpg', '', '', ''),
-(13, 0, 0, 3, 3, 0, 'dasdasda', 'asfsa', 9, 'adasda', '2024-11-30 11:11:00', '', '', '', ''),
-(14, 0, 1, 1, 3, 0, 'ppp', 'pp', 9, 'pp', '2024-11-29 08:08:00', 'cab63fd5e47cb2ce49ef89da16873d6b.jpg', '', '', ''),
-(15, 0, 1, 1, 3, 0, 'kl', 'kk', 8, 'ds', '2024-11-30 11:11:00', '4bbf74aa397bdcb937c08f824fef1b64.jpg', '', '', ''),
-(16, 1, 1, 3, 3, 0, 'testing chat', 'hhhjkhkhkhkhkhkhkhjjjh', 38, 'Seminar Online', '2025-01-16 10:03:00', 'c76c1699f16e04877a4f3d1ea37e5ed9.jpg', 'http://localhost/seminar-ku/seminar/add', '', ''),
-(17, 1, 1, 3, 3, 1, 'seminar onlin', 'sdaasfasfasfdasfdfdd', 38, 'Seminar Online', '2025-01-17 11:11:00', '4fffbad783ac2e14c4a8d19baa86f037.jpg', 'http://localhost/seminar-ku/seminar/add', '', ''),
-(18, 2, 1, 9, 2, 0, 'testing chat off', 'fdsdsafdsfd', 18, 'hhhkhkhkhk', '1111-11-22 12:22:00', 'b138c4725054e0a864dd9b29416c8c3d.png', '', '', '');
-
 -- --------------------------------------------------------
 
 --
@@ -597,16 +488,6 @@ CREATE TABLE `sponsor` (
   `gambar` varchar(100) NOT NULL,
   `id_seminar` tinyint(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `sponsor`
---
-
-INSERT INTO `sponsor` (`id_sponsor`, `id_vendor`, `nama_sponsor`, `gambar`, `id_seminar`) VALUES
-(8, 1, 'Teh botol sosro', 'f77f72030d9b8bc4460a70a6741790ad.jpg', 14),
-(9, 1, 'Nutragen', '29625b88acc99c9a8a3b74b44c0c338c.jpg', 3),
-(10, 0, 'Binary Indonesia', '861dda7fd02729eda0b36350337c4b50.jpg', 4),
-(12, 1, 'jkjkjkjkjjkjkjjkkjkj', 'ef3a7cacf28dcd3bdd7450aba131b984.png', 14);
 
 -- --------------------------------------------------------
 
@@ -662,21 +543,6 @@ CREATE TABLE `tiket` (
   `tiket_terjual` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `tiket`
---
-
-INSERT INTO `tiket` (`id_tiket`, `id_vendor`, `id_seminar`, `harga_tiket`, `slot_tiket`, `lampiran_tiket`, `tiket_terjual`) VALUES
-(6, 0, 3, 50000, 200, '', 29),
-(7, 2, 4, 30000, 300, '', 15),
-(13, 1, 8, 55000, 200, '', 2),
-(14, 0, 14, 0, 22, '', 1),
-(15, 0, 12, 23333, 223, '', 0),
-(16, 1, 16, 0, 666, '', 0),
-(17, 1, 11, 0, 5, '', 0),
-(18, 1, 17, 0, 77, '', 0),
-(19, 1, 18, 28, 56, '', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -691,20 +557,6 @@ CREATE TABLE `transaksi_master` (
   `jumlah_keluar` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `transaksi_master`
---
-
-INSERT INTO `transaksi_master` (`id_transaksi`, `id_vendor`, `tgl_transaksi`, `jumlah_masuk`, `jumlah_keluar`) VALUES
-(121, 3, '2024-12-24', 12000, 0),
-(1222, 2, '2024-12-03', 23000, 0),
-(6771, 37, '2024-12-30', 70000, 0),
-(67706, 28, '2024-12-29', 50000, 0),
-(677066, 1, '2024-12-29', 50000, 0),
-(677070, 30, '2024-12-29', 50000, 0),
-(677067974, 1, '2024-12-29', 50000, 0),
-(2147483647, 31, '2024-12-29', 70000, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -713,19 +565,12 @@ INSERT INTO `transaksi_master` (`id_transaksi`, `id_vendor`, `tgl_transaksi`, `j
 
 CREATE TABLE `transaksi_user` (
   `id_transaksi` int(11) NOT NULL,
-  `id_admin` int(28) NOT NULL,
+  `id_vendor` int(28) NOT NULL,
   `id_seminar` int(10) NOT NULL,
   `id_mahasiswa` int(11) NOT NULL,
   `tgl_transaksi` datetime NOT NULL,
   `jumlah` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `transaksi_user`
---
-
-INSERT INTO `transaksi_user` (`id_transaksi`, `id_admin`, `id_seminar`, `id_mahasiswa`, `tgl_transaksi`, `jumlah`) VALUES
-(1, 1, 14, 37, '2024-11-28 17:20:40', 50000);
 
 -- --------------------------------------------------------
 
@@ -797,28 +642,6 @@ CREATE TABLE `user_mhs` (
   `reset_token` varchar(255) DEFAULT NULL,
   `expiry_time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `user_mhs`
---
-
-INSERT INTO `user_mhs` (`id_mahasiswa`, `id_admin`, `nim`, `foto`, `email`, `password`, `id_reset`, `reset_token`, `expiry_time`) VALUES
-(1, 0, '12345678', '', 'Rid@g.com', 'be60d5acf94273e503e12944ba730d51', 1, NULL, NULL),
-(39, 0, '2412001', '', 'y@gmail.com', '3d4f25a6c633a2122dc6aed0565ac0d0', 0, NULL, NULL),
-(40, 0, '2412002', '', 'testing@gmail.com', 'ae2b1fca515949e5d54fb22b8ed95575', 0, NULL, NULL),
-(41, 0, '2412003', '', 'testing1@gmail.com', '6b7330782b2feb4924020cc4a57782a9', 0, NULL, NULL),
-(42, 0, '2412004', 'tes.png', 'user@gmail.com', '5a30c9609b52fe348fb6925896e061de', 0, NULL, NULL),
-(45, 0, '2501003', '', 'hamid@gmail.com', 'ec2b3dfc15048614548fc885fd5a5838', 0, NULL, NULL),
-(46, 0, '2501004', '', 'kurni@gmail.com', '52e41e24229040a08127ea523ea66f63', 0, NULL, NULL),
-(47, 0, '2501005', '', 'mansur@gmail.com', '4f003caba1533568b048bd5511a7c4a8', 0, NULL, NULL),
-(48, 0, '2501006', '', 'mansur1@gmail.com', '9311458354d09c269e0feb2d8167a6d9', 0, NULL, NULL),
-(49, 0, '2501007', '', 'kurnie@gmail.com', '52e41e24229040a08127ea523ea66f63', 0, NULL, NULL),
-(50, 0, '2501008', '', 'maskur@gmail.com', 'a62dc57257a68232e97d73a01738e777', 0, NULL, NULL),
-(51, 0, '2501009', '', 'maskur1@gmail.com', 'a62dc57257a68232e97d73a01738e777', 0, NULL, NULL),
-(52, 0, '2501010', '', 'maskur2@gmail.com', '5a30c9609b52fe348fb6925896e061de', 0, NULL, NULL),
-(53, 0, '2501011', '', 'masku6r2@gmail.com', '5a30c9609b52fe348fb6925896e061de', 0, NULL, NULL),
-(54, 0, '2501012', '', 'masku6r62@gmail.com', '9311458354d09c269e0feb2d8167a6d9', 0, NULL, NULL),
-(55, 0, '2501013', '', 'mask1u6r62@gmail.com', '3ab9fc44676cd696802656874abe4dc4', 0, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -1025,7 +848,7 @@ ALTER TABLE `bank`
 -- AUTO_INCREMENT for table `chat_komunitas`
 --
 ALTER TABLE `chat_komunitas`
-  MODIFY `id_chat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_chat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `fakultas`
@@ -1103,7 +926,7 @@ ALTER TABLE `pembicara`
 -- AUTO_INCREMENT for table `pendaftaran_seminar`
 --
 ALTER TABLE `pendaftaran_seminar`
-  MODIFY `id_pendaftaran` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=365;
+  MODIFY `id_pendaftaran` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=380;
 
 --
 -- AUTO_INCREMENT for table `presensi_seminar`
@@ -1115,7 +938,7 @@ ALTER TABLE `presensi_seminar`
 -- AUTO_INCREMENT for table `seminar`
 --
 ALTER TABLE `seminar`
-  MODIFY `id_seminar` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_seminar` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `sponsor`
@@ -1139,7 +962,7 @@ ALTER TABLE `status_pembayaran`
 -- AUTO_INCREMENT for table `tiket`
 --
 ALTER TABLE `tiket`
-  MODIFY `id_tiket` tinyint(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_tiket` tinyint(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `transaksi_master`
@@ -1151,13 +974,13 @@ ALTER TABLE `transaksi_master`
 -- AUTO_INCREMENT for table `transaksi_user`
 --
 ALTER TABLE `transaksi_user`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_vendor` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id_vendor` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `users_groups`
