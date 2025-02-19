@@ -1,10 +1,7 @@
 <header class="bg-white shadow-sm fixed top-0 left-0 right-0 z-30 h-16">
    <div class="mx-auto max-w-full">
        <div class="flex justify-end items-center h-16 px-8">
-           <!-- Mobile menu button -->
-           <button class="md:hidden text-gray-500 hover:text-gray-700">
-               <i class="bi bi-list text-2xl"></i>
-           </button>
+         
 
            <!-- Right Navigation -->
            <div class="flex items-center space-x-4">

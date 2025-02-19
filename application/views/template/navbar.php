@@ -14,9 +14,6 @@
                     <?php echo isset($nama_vendor) ? $nama_vendor : 'SIMAS'; ?>
                 </span>
             </a>
-            <button id="mobile-collapse" class="text-gray-300 hover:text-white md:hidden">
-                <i data-feather="menu"></i>
-            </button>
         </div>
 
         <!-- Navigation Content -->

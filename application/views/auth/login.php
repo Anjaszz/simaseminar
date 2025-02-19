@@ -175,7 +175,15 @@
     </button>
                     </div>
                 <?php echo form_close(); ?>
+                <a  href="<?php echo base_url('/landingVendor'); ?>"  class="w-full flex justify-center items-center pt-4 px-4 text-white " > 
+                
+
+                <i class="fas fa-arrow-left mr-2"></i>
+                <p >Kembali</p>
+                </a>
+               
             </div>
+            
         </div>
     </div>
 
