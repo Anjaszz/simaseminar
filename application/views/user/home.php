@@ -679,6 +679,172 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+// Chat functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const chatbotIcon = document.getElementById('chatbot-icon');
+    const chatbotContainer = document.getElementById('chatbot-container');
+    const closeChat = document.getElementById('close-chat');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const chatMessages = document.getElementById('chat-messages');
+
+    // Define suggested questions
+    const suggestedQuestions = [
+        'Bagaimana cara mendaftar seminar?',
+        'Apa saja jenis seminar yang tersedia?',
+        'Bagaimana cara mendapatkan sertifikat?',
+        'Berapa biaya untuk mengikuti seminar?'
+    ];
+
+    // Function to create initial chat content
+    function createInitialChatContent() {
+        return `
+            <div class="bot-message mb-4">
+                <div class="flex items-start">
+                    <div class="bg-blue-100 rounded-lg p-3 max-w-[80%]">
+                        <p class="text-gray-800">Halo! Saya asisten SIMAS. Ada yang bisa saya bantu tentang seminar?</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="suggested-questions mb-4">
+                <p class="text-sm text-gray-500 mb-2">Pertanyaan yang sering ditanyakan:</p>
+                <div class="flex flex-col gap-2">
+                    ${suggestedQuestions.map(question => `
+                        <button class="suggest-btn text-left px-3 py-2 bg-white border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors text-sm">
+                            ${question}
+                        </button>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    // Toggle chat interface
+    chatbotIcon.addEventListener('click', () => {
+        chatbotContainer.classList.toggle('hidden');
+        if (!chatbotContainer.classList.contains('hidden')) {
+            chatInput.focus();
+            chatMessages.innerHTML = createInitialChatContent();
+            addSuggestionListeners();
+        }
+    });
+
+    closeChat.addEventListener('click', () => {
+        chatbotContainer.classList.add('hidden');
+    });
+
+    // Function to add suggestion button listeners
+    function addSuggestionListeners() {
+        document.querySelectorAll('.suggest-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const question = this.textContent.trim();
+                handleUserMessage(question);
+                
+                // Remove suggestions after clicking
+                const suggestedQuestions = document.querySelector('.suggested-questions');
+                if (suggestedQuestions) {
+                    suggestedQuestions.remove();
+                }
+            });
+        });
+    }
+
+    // Function to add a message to the chat
+    function addMessage(message, type) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `${type}-message mb-4 ${type === 'user' ? 'text-right' : 'text-left'}`;
+        
+        // Add animation classes based on message type
+        const animationClass = type === 'user' ? 'slide-left' : 'slide-right';
+        
+        messageDiv.innerHTML = `
+            <div class="flex items-start ${type === 'user' ? 'justify-end' : 'justify-start'}">
+                <div class="${type === 'user' ? 'bg-blue-600 text-white' : 'bg-blue-100 text-gray-800'} 
+                            rounded-lg p-3 max-w-[80%] ${animationClass}">
+                    <p>${message}</p>
+                </div>
+            </div>
+        `;
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Function to handle sending messages
+    async function handleUserMessage(message) {
+        // Show user message
+        addMessage(message, 'user');
+        
+        // Clear input field
+        chatInput.value = '';
+
+        // Show loading indicator
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'bot-message mb-4';
+        loadingDiv.innerHTML = `
+            <div class="flex items-start">
+                <div class="bg-blue-100 rounded-lg p-3">
+                    <p class="text-gray-800">
+                        <i class="fas fa-spinner fa-spin"></i> Mengetik...
+                    </p>
+                </div>
+            </div>
+        `;
+        chatMessages.appendChild(loadingDiv);
+
+        try {
+            // Send message to backend
+            const response = await fetch('<?php echo base_url("api/chat"); ?>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message })
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            
+            // Remove loading indicator
+            loadingDiv.remove();
+            
+            // Show bot response
+            addMessage(data.response, 'bot');
+
+        } catch (error) {
+            console.error('Error:', error);
+            loadingDiv.remove();
+            addMessage('Maaf, terjadi kesalahan. Silakan coba lagi.', 'bot');
+        }
+    }
+
+    // Handle form submission
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const message = chatInput.value.trim();
+        
+        if (!message) return;
+        
+        handleUserMessage(message);
+    });
+
+    // Add keypress event for better UX
+    chatInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            chatForm.dispatchEvent(new Event('submit'));
+        }
+    });
+
+    // Initialize chat
+    chatMessages.innerHTML = createInitialChatContent();
+    addSuggestionListeners();
+});
+
 // Fungsi untuk popup gambar
 const imageModal = document.getElementById('imageModal');
 const modalImage = document.getElementById('modalImage');
