@@ -526,26 +526,10 @@
             </div>
         </div>
     </section>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-// Fungsi untuk popup gambar
-const imageModal = document.getElementById('imageModal');
-const modalImage = document.getElementById('modalImage');
-const closeModal = document.getElementById('closeModal');
-
-function showImage(element) {
-    const imageSrc = element.getAttribute('data-src');
-    
-    // Preload gambar untuk mendapatkan dimensi asli
-    const img = new Image();
-    img.src = imageSrc;
-    
-    img.onload = function() {
-        modalImage.src = imageSrc;
-        imageModal.classList.remove('hidden');
+    <section class="py-12 bg-gray-50">  
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Apa Kata Mereka?</h2>
         
-<<<<<<< HEAD
         <div class="testimonial-container">
             <div class="testimonial-track" id="testimonialTrack">
                 <?php foreach ($testimonials as $index => $testimonial): ?>  
@@ -574,8 +558,7 @@ function showImage(element) {
         </div>
     </div>  
 </section>
-  
-   <!-- CTA Section -->  
+
 <section class="relative py-20 bg-gradient-to-br from-blue-600 to-purple-700 overflow-hidden cta-gradient">
     <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-700 opacity-75"></div>
     
@@ -659,11 +642,60 @@ function showImage(element) {
                 </div>
             </div>
         </div>
-=======
-        // Sesuaikan ukuran gambar dengan aspect ratio asli
-        const viewportHeight = window.innerHeight * 0.85; // 85vh
-        const aspectRatio = this.width / this.height;
->>>>>>> 189cdac90ebc4798f589411ab665408ffdf1f8a0
+
+          <!-- Suggested Questions -->
+          <div class="suggested-questions mb-4">
+            <p class="text-sm text-gray-500 mb-2">Pertanyaan yang sering ditanyakan:</p>
+            <div class="flex flex-col gap-2">
+                <button class="suggest-btn text-left px-3 py-2 bg-white border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors text-sm">
+                    Bagaimana cara mendaftar seminar?
+                </button>
+                <button class="suggest-btn text-left px-3 py-2 bg-white border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors text-sm">
+                    Apa saja seminar gratis yang tersedia?
+                </button>
+                <button class="suggest-btn text-left px-3 py-2 bg-white border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors text-sm">
+                    Bagaimana cara mendapatkan sertifikat seminar?
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Chat Input -->
+    <div class="p-4 border-t">
+        <form id="chat-form" class="flex gap-2">
+            <input type="text" 
+                   id="chat-input" 
+                   class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                   placeholder="Ketik pesan...">
+            <button type="submit" 
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+</div>
+</div>  
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+// Fungsi untuk popup gambar
+const imageModal = document.getElementById('imageModal');
+const modalImage = document.getElementById('modalImage');
+const closeModal = document.getElementById('closeModal');
+
+function showImage(element) {
+    const imageSrc = element.getAttribute('data-src');
+    
+    // Preload gambar untuk mendapatkan dimensi asli
+    const img = new Image();
+    img.src = imageSrc;
+    
+    img.onload = function() {
+        modalImage.src = imageSrc;
+        imageModal.classList.remove('hidden');
+    
+
         
         if (this.height > viewportHeight) {
             modalImage.style.height = `${viewportHeight}px`;
