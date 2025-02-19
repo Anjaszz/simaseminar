@@ -79,6 +79,37 @@ class Payment extends CI_Controller {
                 log_message('error', 'Invalid parameter types');
                 throw new Exception('Format parameter tidak valid');
             }
+    
+            // Jika status pembayaran berhasil (status = 1)
+            if ($status == 1) {
+                // Ambil data pendaftaran dengan id_vendor
+                $this->db->select('pendaftaran_seminar.id_seminar, pendaftaran_seminar.id_mahasiswa, seminar.id_vendor');
+                $this->db->from('pendaftaran_seminar');
+                $this->db->join('seminar', 'pendaftaran_seminar.id_seminar = seminar.id_seminar');
+                $this->db->where('pendaftaran_seminar.id_pendaftaran', $id_pendaftaran);
+                $pendaftaran_data = $this->db->get()->row();
+    
+                if ($pendaftaran_data) {
+                    // Ambil harga tiket
+                    $this->db->select('harga_tiket');
+                    $this->db->where('id_seminar', $pendaftaran_data->id_seminar);
+                    $tiket_data = $this->db->get('tiket')->row();
+    
+                    if ($tiket_data) {
+                        // Data untuk tabel transaksi_user
+                        $transaksi_data = array(
+                            'id_seminar' => $pendaftaran_data->id_seminar,
+                            'id_mahasiswa' => $pendaftaran_data->id_mahasiswa,
+                            'id_vendor' => $pendaftaran_data->id_vendor, // Tambah ini
+                            'tgl_transaksi' => date('Y-m-d H:i:s'),
+                            'jumlah' => $tiket_data->harga_tiket
+                        );
+    
+                        // Simpan data transaksi
+                        $this->ModelPayment->saveTransaksi($transaksi_data);
+                    }
+                }
+            }
             
             if ($this->ModelPayment->updatePaymentStatus($id_pendaftaran, $status)) {
                 echo json_encode([

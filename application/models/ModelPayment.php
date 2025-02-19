@@ -1,22 +1,23 @@
 <?php
 class ModelPayment extends CI_Model {
 
-    public function getPaymentDataBySeminar($id_seminar, $id_mahasiswa) {
-        // Mengambil data berdasarkan id_seminar dan id_mahasiswa
-        $this->db->select('pendaftaran_seminar.id_pendaftaran, 
-                           pendaftaran_seminar.id_seminar, 
-                           tiket.harga_tiket, 
-                           mahasiswa.nama_mhs, 
-                           mahasiswa.email, 
-                           mahasiswa.no_telp');
-        $this->db->from('pendaftaran_seminar');
-        $this->db->join('tiket', 'pendaftaran_seminar.id_seminar = tiket.id_seminar', 'left');
-        $this->db->join('mahasiswa', 'pendaftaran_seminar.id_mahasiswa = mahasiswa.id_mahasiswa', 'left');
-        $this->db->where('pendaftaran_seminar.id_seminar', $id_seminar);
-        $this->db->where('mahasiswa.id_mahasiswa', $id_mahasiswa); // Menambahkan kondisi id_mahasiswa
-        return $this->db->get()->row();
-    }
-
+    // Di ModelPayment, tambahkan kolom id_vendor pada getPaymentDataBySeminar
+public function getPaymentDataBySeminar($id_seminar, $id_mahasiswa) {
+    $this->db->select('pendaftaran_seminar.id_pendaftaran, 
+                       pendaftaran_seminar.id_seminar, 
+                       tiket.harga_tiket, 
+                       mahasiswa.nama_mhs, 
+                       mahasiswa.email, 
+                       mahasiswa.no_telp,
+                       seminar.id_vendor'); // Tambah ini
+    $this->db->from('pendaftaran_seminar');
+    $this->db->join('tiket', 'pendaftaran_seminar.id_seminar = tiket.id_seminar', 'left');
+    $this->db->join('mahasiswa', 'pendaftaran_seminar.id_mahasiswa = mahasiswa.id_mahasiswa', 'left');
+    $this->db->join('seminar', 'pendaftaran_seminar.id_seminar = seminar.id_seminar', 'left'); // Tambah ini
+    $this->db->where('pendaftaran_seminar.id_seminar', $id_seminar);
+    $this->db->where('mahasiswa.id_mahasiswa', $id_mahasiswa);
+    return $this->db->get()->row();
+}
     public function updatePaymentStatus($id_pendaftaran, $status) {
         // Update status pembayaran di pendaftaran_seminar
         $this->db->where('id_pendaftaran', $id_pendaftaran);
@@ -50,5 +51,9 @@ class ModelPayment extends CI_Model {
             return false;
         }
     }
+    // Di ModelPayment, tambahkan fungsi baru:
+public function saveTransaksi($data) {
+    return $this->db->insert('transaksi_user', $data);
+}
 
 }

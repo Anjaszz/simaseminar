@@ -150,96 +150,110 @@ public function simpan() {
     }
 
     public function vendor()
-{
-    // Aturan validasi
-    $this->form_validation->set_rules('nama_vendor', 'Nama Vendor', 'required');
-    $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-    $this->form_validation->set_rules('no_telp', 'No Telepon', 'required|numeric');
-    $this->form_validation->set_rules('id_bank', 'Nama Bank', 'required');
-    $this->form_validation->set_rules('no_rekening', 'Nomor Rekening', 'required|numeric');
-    $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
-    $this->form_validation->set_rules('confirm_password', 'Konfirmasi Password', 'required|matches[password]');
-    $this->form_validation->set_rules('lama_berlangganan', 'Lama Berlangganan', 'required');
-
-    if ($this->form_validation->run() == FALSE) {
-        // Jika validasi gagal
-        $data = [
-            'title' => 'Tambah Data Vendor',
-            'parent' => 'Data Vendor',
-            'banks' => $this->vnd->get_all_banks() // Ambil data bank
-        ];
-        $this->load->view('master/vendor/daftar', $data);
-    } else {
-        // Jika validasi berhasil, siapkan data untuk vendor
-        $vendor_data = [
-            'nama_vendor' => $this->input->post('nama_vendor'),
-            'email' => $this->input->post('email'),
-            'no_telp' => $this->input->post('no_telp'),
-            'id_bank' => $this->input->post('id_bank'),
-            'no_rekening' => $this->input->post('no_rekening'),
-            'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-            'tgl_subs' => date('Y-m-d'),
-            'active' => 0 // Status default: tidak aktif
-        ];
-
-        // Ambil lama berlangganan dan tentukan harga
-        $lama_berlangganan = $this->input->post('lama_berlangganan');
-        $harga = 0;
-
-        switch ($lama_berlangganan) {
-            case '3':
-                $harga = 50000;
-                $vendor_data['tgl_berakhir'] = date('Y-m-d', strtotime('+3 months'));
-                break;
-            case '6':
-                $harga = 70000;
-                $vendor_data['tgl_berakhir'] = date('Y-m-d', strtotime('+6 months'));
-                break;
-            case '12':
-                $harga = 100000;
-                $vendor_data['tgl_berakhir'] = date('Y-m-d', strtotime('+1 year'));
-                break;
+    {
+        // Aturan validasi tetap sama
+        $this->form_validation->set_rules('nama_vendor', 'Nama Vendor', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+        $this->form_validation->set_rules('no_telp', 'No Telepon', 'required|numeric');
+        $this->form_validation->set_rules('id_bank', 'Nama Bank', 'required');
+        $this->form_validation->set_rules('no_rekening', 'Nomor Rekening', 'required|numeric');
+        $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
+        $this->form_validation->set_rules('confirm_password', 'Konfirmasi Password', 'required|matches[password]');
+        $this->form_validation->set_rules('lama_berlangganan', 'Lama Berlangganan', 'required');
+    
+        if ($this->form_validation->run() == FALSE) {
+            $data = [
+                'title' => 'Tambah Data Vendor',
+                'parent' => 'Data Vendor',
+                'banks' => $this->vnd->get_all_banks()
+            ];
+            $this->load->view('master/vendor/daftar', $data);
+        } else {
+            $lama_berlangganan = $this->input->post('lama_berlangganan');
+            
+            // Siapkan data vendor
+            $vendor_data = [
+                'nama_vendor' => $this->input->post('nama_vendor'),
+                'email' => $this->input->post('email'),
+                'no_telp' => $this->input->post('no_telp'),
+                'id_bank' => $this->input->post('id_bank'),
+                'no_rekening' => $this->input->post('no_rekening'),
+                'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+                'tgl_subs' => date('Y-m-d'),
+                'active' => 0
+            ];
+    
+            // Cek apakah ini paket trial
+            if ($lama_berlangganan === 'trial') {
+                $vendor_data['tgl_berakhir'] = date('Y-m-d', strtotime('+1 month'));
+                $vendor_data['active'] = 1; // Langsung aktif untuk trial
+                
+                // Simpan data vendor
+                $vendor_id = $this->vnd->insert_data($vendor_data);
+                
+                if ($vendor_id) {
+                    $this->session->set_flashdata('success', 'Pendaftaran trial berhasil! Silakan login.');
+                    redirect('auth/login');
+                } else {
+                    $this->session->set_flashdata('error', 'Terjadi kesalahan saat mendaftar.');
+                    redirect('vendor/register');
+                }
+            } else {
+                // Untuk paket berbayar
+                $harga = 0;
+                switch ($lama_berlangganan) {
+                    case '3':
+                        $harga = 50000;
+                        $vendor_data['tgl_berakhir'] = date('Y-m-d', strtotime('+3 months'));
+                        break;
+                    case '6':
+                        $harga = 70000;
+                        $vendor_data['tgl_berakhir'] = date('Y-m-d', strtotime('+6 months'));
+                        break;
+                    case '12':
+                        $harga = 100000;
+                        $vendor_data['tgl_berakhir'] = date('Y-m-d', strtotime('+1 year'));
+                        break;
+                }
+    
+                // Simpan data ke session
+                $this->session->set_userdata('vendor_data', $vendor_data);
+                $this->session->set_userdata('harga', $harga);
+    
+                // Buat transaksi Midtrans
+                $transaction_details = [
+                    'order_id' => uniqid(),
+                    'gross_amount' => $harga,
+                ];
+    
+                $item_details = [
+                    [
+                        'id' => 'item1',
+                        'price' => $harga,
+                        'quantity' => 1,
+                        'name' => 'Pendaftaran Vendor'
+                    ]
+                ];
+    
+                $customer_details = [
+                    'first_name' => $this->input->post('nama_vendor'),
+                    'email' => $this->input->post('email'),
+                    'phone' => $this->input->post('no_telp'),
+                ];
+    
+                $transaction_data = [
+                    'transaction_details' => $transaction_details,
+                    'item_details' => $item_details,
+                    'customer_details' => $customer_details,
+                ];
+    
+                $snapToken = \Midtrans\Snap::getSnapToken($transaction_data);
+                $data['snap_token'] = $snapToken;
+    
+                $this->load->view('master/vendor/payment', $data);
+            }
         }
-
-        // Simpan data vendor ke session untuk digunakan setelah pembayaran
-        $this->session->set_userdata('vendor_data', $vendor_data);
-        $this->session->set_userdata('harga', $harga); // Simpan harga ke session
-
-        // Buat transaksi
-        $transaction_details = [
-            'order_id' => uniqid(), // ID unik untuk transaksi
-            'gross_amount' => $harga, // Jumlah yang harus dibayar
-        ];
-
-        $item_details = [
-            [
-                'id' => 'item1',
-                'price' => $harga,
-                'quantity' => 1,
-                'name' => 'Pendaftaran Vendor'
-            ]
-        ];
-
-        $customer_details = [
-            'first_name' => $this->input->post('nama_vendor'),
-            'email' => $this->input->post('email'),
-            'phone' => $this->input->post('no_telp'),
-        ];
-
-        $transaction_data = [
-            'transaction_details' => $transaction_details,
-            'item_details' => $item_details,
-            'customer_details' => $customer_details,
-        ];
-
-        // Dapatkan URL pembayaran
-        $snapToken = \Midtrans\Snap::getSnapToken($transaction_data);
-        $data['snap_token'] = $snapToken;
-
-        // Tampilkan halaman pembayaran
-        $this->load->view('master/vendor/payment', $data);
     }
-}
 
 
 public function handle_payment()

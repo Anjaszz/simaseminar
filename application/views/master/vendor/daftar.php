@@ -293,48 +293,60 @@
                         </div>
 
                         <!-- Subscription Package -->
-                        <div class="space-y-2">
-                            <h3 class="text-lg font-medium text-gray-900">Paket Berlangganan</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <!-- 3 Month Package -->
-                                <div class="pricing-card p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-500 cursor-pointer group">
-                                    <input type="radio" name="lama_berlangganan" value="3" class="hidden" id="package3">
-                                    <label for="package3" class="cursor-pointer">
-                                        <div class="text-center">
-                                            <h4 class="font-semibold text-gray-900 group-hover:text-blue-600">3 Bulan</h4>
-                                            <p class="mt-2 text-2xl font-bold text-blue-600">Rp 50.000</p>
-                                            <p class="mt-1 text-sm text-gray-500">Rp 16.667/bulan</p>
-                                        </div>
-                                    </label>
-                                </div>
+<div class="space-y-2">
+    <h3 class="text-lg font-medium text-gray-900">Paket Berlangganan</h3>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- Trial Package -->
+        <div class="pricing-card p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-500 cursor-pointer group">
+            <input type="radio" name="lama_berlangganan" value="trial" class="hidden" id="packageTrial">
+            <label for="packageTrial" class="cursor-pointer">
+                <div class="text-center">
+                    <h4 class="font-semibold text-gray-900 group-hover:text-blue-600">Trial</h4>
+                    <p class="mt-2 text-2xl font-bold text-green-600">GRATIS</p>
+                    <p class="mt-1 text-sm text-gray-500">1 Bulan</p>
+                    <span class="mt-2 inline-block px-3 py-1 bg-green-100 text-green-800 text-xs rounded-full">Coba Gratis</span>
+                </div>
+            </label>
+        </div>
 
-                                <!-- 6 Month Package -->
-                                <div class="pricing-card p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-500 cursor-pointer group">
-                                    <input type="radio" name="lama_berlangganan" value="6" class="hidden" id="package6">
-                                    <label for="package6" class="cursor-pointer">
-                                        <div class="text-center">
-                                            <h4 class="font-semibold text-gray-900 group-hover:text-blue-600">6 Bulan</h4>
-                                            <p class="mt-2 text-2xl font-bold text-blue-600">Rp 70.000</p>
-                                            <p class="mt-1 text-sm text-gray-500">Rp 11.667/bulan</p>
-                                        </div>
-                                    </label>
-                                </div>
+        <!-- 3 Month Package -->
+        <div class="pricing-card p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-500 cursor-pointer group">
+            <input type="radio" name="lama_berlangganan" value="3" class="hidden" id="package3">
+            <label for="package3" class="cursor-pointer">
+                <div class="text-center">
+                    <h4 class="font-semibold text-gray-900 group-hover:text-blue-600">3 Bulan</h4>
+                    <p class="mt-2 text-2xl font-bold text-blue-600">Rp 50.000</p>
+                    <p class="mt-1 text-sm text-gray-500">Rp 16.667/bulan</p>
+                </div>
+            </label>
+        </div>
 
-                                <!-- 12 Month Package -->
-                                <div class="pricing-card p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-500 cursor-pointer group">
-                                    <input type="radio" name="lama_berlangganan" value="12" class="hidden" id="package12">
-                                    <label for="package12" class="cursor-pointer">
-                                        <div class="text-center">
-                                            <h4 class="font-semibold text-gray-900 group-hover:text-blue-600">1 Tahun</h4>
-                                            <p class="mt-2 text-2xl font-bold text-blue-600">Rp 100.000</p>
-                                            <p class="mt-1 text-sm text-gray-500">Rp 8.333/bulan</p>
-                                            <span class="mt-2 inline-block px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Hemat 50%</span>
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+        <!-- 6 Month Package -->
+        <div class="pricing-card p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-500 cursor-pointer group">
+            <input type="radio" name="lama_berlangganan" value="6" class="hidden" id="package6">
+            <label for="package6" class="cursor-pointer">
+                <div class="text-center">
+                    <h4 class="font-semibold text-gray-900 group-hover:text-blue-600">6 Bulan</h4>
+                    <p class="mt-2 text-2xl font-bold text-blue-600">Rp 70.000</p>
+                    <p class="mt-1 text-sm text-gray-500">Rp 11.667/bulan</p>
+                </div>
+            </label>
+        </div>
 
+        <!-- 12 Month Package -->
+        <div class="pricing-card p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-500 cursor-pointer group">
+            <input type="radio" name="lama_berlangganan" value="12" class="hidden" id="package12">
+            <label for="package12" class="cursor-pointer">
+                <div class="text-center">
+                    <h4 class="font-semibold text-gray-900 group-hover:text-blue-600">1 Tahun</h4>
+                    <p class="mt-2 text-2xl font-bold text-blue-600">Rp 100.000</p>
+                    <p class="mt-1 text-sm text-gray-500">Rp 8.333/bulan</p>
+                    <span class="mt-2 inline-block px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Hemat 50%</span>
+                </div>
+            </label>
+        </div>
+    </div>
+</div>
                         <!-- Security Section -->
                         <div class="space-y-2">
                             <h3 class="text-lg font-medium text-gray-900">Keamanan Akun</h3>

@@ -30,8 +30,39 @@
         <!-- Chat Box -->
         <div class="bg-[#E8ECF0] rounded-b-lg shadow-sm border-x border-b border-gray-200 mb-6">
             <div class="h-[500px] overflow-y-auto p-4" id="chat-container">
-                <?php foreach ($chats as $chat): ?>
-                    <?php $is_sender = $chat['id_mahasiswa'] === $this->session->userdata('id_mahasiswa'); ?>
+                <?php 
+                $current_date = '';
+                foreach ($chats as $chat): 
+                    // Get message date
+                    $msg_date = date('Y-m-d', strtotime($chat['created_at']));
+                    
+                    // If date changes, show date divider
+                    if ($msg_date !== $current_date):
+                        $current_date = $msg_date;
+                        // Format date for display
+                        if ($msg_date === date('Y-m-d')) {
+                            $display_date = 'Hari Ini';
+                        } else {
+                            $months = [
+                                '01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' => 'April',
+                                '05' => 'Mei', '06' => 'Juni', '07' => 'Juli', '08' => 'Agustus',
+                                '09' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember'
+                            ];
+                            $day = date('d', strtotime($msg_date));
+                            $month = $months[date('m', strtotime($msg_date))];
+                            $year = date('Y', strtotime($msg_date));
+                            $display_date = "$day $month $year";
+                        }
+                ?>
+                    <div class="flex items-center justify-center my-4">
+                        <div class="bg-white px-3 py-1 rounded-full text-sm text-gray-500 shadow-sm">
+                            <?= $display_date ?>
+                        </div>
+                    </div>
+                <?php 
+                    endif;
+                    $is_sender = $chat['id_mahasiswa'] === $this->session->userdata('id_mahasiswa'); 
+                ?>
                     
                     <div class="mb-4 <?= $is_sender ? 'flex flex-col items-end' : 'flex flex-col items-start' ?>">
                         <div class="flex items-end <?= $is_sender ? 'flex-row-reverse' : 'flex-row' ?> gap-2 max-w-[80%] group">
@@ -51,7 +82,7 @@
                                         </div>
                                     <?php endif; ?>
 
-                                    <?php if ($chat['tipe_file'] === 'text'): ?>
+                                    <?php if ($chat['tipe_file'] === 'text' || empty($chat['tipe_file'])): ?>
                                         <div class="text-base font-normal text-gray-700 leading-relaxed">
                                             <?= $chat['pesan']; ?>
                                         </div>
@@ -201,7 +232,6 @@
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Send AJAX request to delete
                     $.ajax({
                         url: '<?= site_url('user/chat/delete'); ?>',
                         type: 'POST',
@@ -217,21 +247,154 @@
                                     title: 'Berhasil!',
                                     text: 'Pesan telah dihapus',
                                     showConfirmButton: false,
+                                    timer:
                                     timer: 1500
-                                }).then(() => {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire('Error!', 'Gagal menghapus pesan', 'error');
-                            }
-                        },
-                        error: function() {
-                            Swal.fire('Error!', 'Terjadi kesalahan pada server', 'error');
-                        }
-                    });
-                }
-            });
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire('Error!', 'Gagal menghapus pesan', 'error');
+            }
+        },
+        error: function() {
+            Swal.fire('Error!', 'Terjadi kesalahan pada server', 'error');
         }
-    </script>
+    });
+}
+});
+}
+
+// Auto refresh chat setiap 10 detik
+setInterval(function() {
+    $.ajax({
+        url: window.location.href,
+        success: function(response) {
+            // Ambil container chat dari response
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(response, 'text/html');
+            const newChatContainer = doc.getElementById('chat-container').innerHTML;
+            
+            // Update container chat jika ada perubahan
+            if (newChatContainer !== chatContainer.innerHTML) {
+                chatContainer.innerHTML = newChatContainer;
+                
+                // Scroll ke bawah jika ada pesan baru
+                if (chatContainer.scrollTop + chatContainer.clientHeight === chatContainer.scrollHeight) {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }
+                
+                // Reinisialisasi Feather Icons
+                feather.replace();
+            }
+        }
+    });
+}, 10000);
+
+// Tambahkan event listener untuk file upload
+fileInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        // Tampilkan nama file
+        fileName.textContent = file.name;
+        
+        // Validasi ukuran file (maksimal 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+            Swal.fire({
+                icon: 'error',
+                title: 'File terlalu besar',
+                text: 'Ukuran file maksimal 2MB'
+            });
+            this.value = '';
+            fileName.textContent = '';
+            return;
+        }
+        
+        // Validasi tipe file
+        const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'application/msword', 
+                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+        if (!allowedTypes.includes(file.type)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Format file tidak didukung',
+                text: 'Format yang didukung: JPG, PNG, PDF, DOC, DOCX'
+            });
+            this.value = '';
+            fileName.textContent = '';
+            return;
+        }
+    }
+});
+
+// Form submit handler
+document.getElementById('chatForm').addEventListener('submit', function(e) {
+    const pesan = document.getElementById('pesan').value.trim();
+    const file = fileInput.files[0];
+    
+    // Validasi: harus ada pesan atau file
+    if (!pesan && !file) {
+        e.preventDefault();
+        Swal.fire({
+            icon: 'warning',
+            title: 'Pesan kosong',
+            text: 'Silakan tulis pesan atau pilih file untuk dikirim'
+        });
+    }
+});
+</script>
+<script>
+    // Scroll otomatis ke bawah saat halaman dimuat
+    function scrollToBottom() {
+        var chatContainer = document.getElementById("chat-container");
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    // Panggil saat halaman selesai dimuat
+    $(document).ready(function () {
+        scrollToBottom();
+        feather.replace(); // Pastikan ikon edit dan hapus berfungsi
+    });
+
+    // Fungsi edit chat
+    function editChat(idChat, pesan) {
+        Swal.fire({
+            title: "Edit Pesan",
+            input: "text",
+            inputValue: pesan,
+            showCancelButton: true,
+            confirmButtonText: "Simpan",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post("<?= site_url('user/chat/edit'); ?>", {
+                    id_chat: idChat,
+                    pesan: result.value,
+                }, function (response) {
+                    location.reload();
+                });
+            }
+        });
+    }
+
+    // Fungsi hapus chat
+    function deleteChat(idChat) {
+        Swal.fire({
+            title: "Hapus Pesan?",
+            text: "Pesan ini akan dihapus secara permanen.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Hapus",
+            cancelButtonText: "Batal",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post("<?= site_url('user/chat/delete'); ?>", {
+                    id_chat: idChat,
+                }, function (response) {
+                    location.reload();
+                });
+            }
+        });
+    }
+</script>
+
+
 </body>
 </html>

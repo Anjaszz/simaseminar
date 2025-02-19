@@ -21,15 +21,16 @@
             </div>
 
             <div class="p-6">
-                <!-- Image Section -->
-                <div class="mb-8">
-                    <img src="<?php echo base_url('uploads/poster/' . $seminar->lampiran); ?>" 
-                         class="rounded-lg shadow-md w-full object-cover max-h-96 mx-auto"
-                         alt="<?php echo $seminar->nama_seminar; ?>">
-                </div>
-
+          
+<div class="grid sm:grid-cols-2 grid-cols-1 gap-4">
+<div class="mb-8">
+    <img src="<?php echo base_url('uploads/poster/' . $seminar->lampiran); ?>" 
+         class="w-full h-auto rounded-lg shadow-md object-cover"
+         style="max-height: 600px;"
+         alt="<?php echo $seminar->nama_seminar; ?>">
+</div>
                 <!-- Quick Info Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <div class="grid grid-cols-1  gap-2 mb-2">
                     <!-- Date Card -->
                     <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
                         <div class="text-blue-600 font-semibold mb-1">Tanggal Acara</div>
@@ -66,17 +67,27 @@
                         </div>
                     </div>
                 </div>
+</div>
 
                 <!-- Detailed Information -->
                 <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
                     <div class="divide-y divide-gray-200">
-                        <!-- Speaker -->
-                        <div class="p-4 hover:bg-gray-50">
+
+<div class="p-4 hover:bg-gray-50">
                             <div class="grid grid-cols-1 md:grid-cols-4">
-                                <div class="font-semibold text-gray-600 md:col-span-1">Pembicara</div>
-                                <div class="md:col-span-3 text-gray-800"><?php echo $seminar->nama_pembicara; ?></div>
+                                <div class="font-semibold text-gray-600 md:col-span-1">Tentang Seminar</div>
+                                <div class="md:col-span-3 text-gray-800"><?php echo $seminar->deskripsi; ?></div>
                             </div>
                         </div>
+
+<!-- Informasi Pembicara -->
+<div class="p-4 hover:bg-gray-50">
+    <div class="grid grid-cols-1 md:grid-cols-4">
+        <div class="font-semibold text-gray-600 md:col-span-1">Pembicara</div>
+        <div class="md:col-span-3 text-gray-800"><?php echo $seminar->nama_pembicara; ?></div>
+    </div>
+</div>
+
 
                         <!-- Detailed Location -->
                         <div class="p-4 hover:bg-gray-50">
