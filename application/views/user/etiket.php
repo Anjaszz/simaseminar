@@ -55,7 +55,7 @@
                     <!-- QR Code Overlay -->
                     <img 
     src="<?php echo $qrcode; ?>" 
-    class="absolute top-6 right-1.5 w-[20%] sm:w-[18%] md:w-[15%] lg:w-[12%] max-w-[80px] sm:max-w-[100px] md:max-w-[120px]"
+    class="absolute sm:top-16 top-6 sm:right-6 right-1.5 w-[20%] sm:w-[18%] md:w-[15%] lg:w-[50%] max-w-[80px] sm:max-w-[100px] md:max-w-[140px]"
     alt="QR Code"
 />
                     
@@ -65,7 +65,7 @@
                             <?php echo $nama_seminar; ?>
                         </h3>
                         
-                        <div class="mt-3 flex items-center justify-center space-x-1 text-white text-[8px] md:text-sm">
+                        <div class="mt-3 pt-8 flex items-center justify-center space-x-1 text-white text-[8px] md:text-base">
     <span class="flex items-center">
         <i class="fas fa-calendar-alt mr-1"></i>
         <?php echo date('d M Y', strtotime($tgl_pelaksana)); ?>
